@@ -114,20 +114,24 @@ void MainWindow::on_pushButton_upload_clicked()
     // Create Excel (QXlsx)
 
     QXlsx::Document xlsx;
-//    xlsx.mergeCells("A1:B1");
-//    xlsx.mergeCells("A2:B2");
-//    xlsx.mergeCells("A3:B3");
+
 
     int excelRow = 1;
+    xlsx.mergeCells("A1:B1");
+    xlsx.mergeCells("A2:B2");
+    xlsx.mergeCells("A3:B3");
+    xlsx.write("A1","Master Tracker No.",headerFormat1);
+    xlsx.write("A2","Invoice No.",headerFormat1);
+    xlsx.write("A3","Invoice Date",headerFormat1);
 
     // 🔹 Handle header info
     if (lines.first().startsWith("HEADER|||")) {
         QStringList header = lines.takeFirst().split("|||");
-
+         qDebug()<<header<<"*******";
         //xlsx.write(excelRow, 1, header.value(1),headerFormat1); excelRow++;
-        xlsx.write("A1", header.value(1),headerFormat1); excelRow++;
-        xlsx.write("A2",header.value(2),headerFormat1); excelRow++;
-        xlsx.write("A3", header.value(3),headerFormat1); excelRow++;
+        xlsx.write("C1",header.value(1),headerFormat1); excelRow++;
+        xlsx.write("C2",header.value(2),headerFormat1); excelRow++;
+        xlsx.write("C3",header.value(3),headerFormat1); excelRow++;
 
         excelRow += 2;  // empty row
     }
@@ -156,8 +160,8 @@ void MainWindow::on_pushButton_upload_clicked()
 
         QStringList parts = line.split("|||", Qt::KeepEmptyParts);
 
-        qDebug() << parts << "***";
-        qDebug() << "total parts:" << parts.size();
+        //qDebug() << parts << "***";
+        //qDebug() << "total parts:" << parts.size();
 
         for (int col = 0; col < parts.size(); ++col) {
             bool ok;
@@ -208,7 +212,7 @@ void MainWindow::on_pushButton_upload_clicked()
     xlsx.write(excelRow,6,totalAmount,amountFormat);
 
     int summaryStartCol=9;
-    int summaryRow=5;
+    int summaryRow=9;
     xlsx.write(summaryRow,summaryStartCol,"SI No",headerFormat);
     xlsx.write(summaryRow, summaryStartCol+1, "Description", headerFormat);
     xlsx.write(summaryRow, summaryStartCol + 2, "Quantity",   headerFormat);
@@ -219,7 +223,7 @@ void MainWindow::on_pushButton_upload_clicked()
     xlsx.setColumnWidth(summaryStartCol, summaryStartCol,15);
     xlsx.setColumnWidth(summaryStartCol + 1, summaryStartCol + 4, 23);
 
-    xlsx.write(4,9,"MERGED Excel",mergeFormat);
+    xlsx.write(8,9,"MERGED Excel",mergeFormat);
     int types=1;
     double totalINR=0.0;
     for (auto it = summaryMap.begin(); it != summaryMap.end(); ++it) {
