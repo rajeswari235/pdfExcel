@@ -21,7 +21,7 @@ public:
 private slots:
 
     void on_pushButton_upload_clicked();
-
+    QString classifyComponent(const QString &desc);
 
 private:
     Ui::MainWindow *ui;
